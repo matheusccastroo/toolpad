@@ -1,6 +1,6 @@
 {
   "name": "@toolpad/core",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "author": "MUI Team",
   "description": "Dashboard framework powered by Material UI.",
   "main": "./node/index.js",
@@ -49,6 +49,8 @@
     "client-only": "^0.0.1",
     "dayjs": "1.11.13",
     "invariant": "2.2.4",
+    "mui-file-input": "^7.0.0",
+    "mui-color-input": "7.0.0",
     "path-to-regexp": "6.3.0",
     "prop-types": "15.8.1"
   },

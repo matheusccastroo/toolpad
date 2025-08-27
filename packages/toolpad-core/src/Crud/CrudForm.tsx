@@ -20,6 +20,13 @@ import { DateTimePicker, DateTimePickerProps } from '@mui/x-date-pickers/DateTim
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import type { GridSingleSelectColDef } from '@mui/x-data-grid';
 import dayjs, { Dayjs } from 'dayjs';
+import { MuiFileInput, MuiFileInputProps } from 'mui-file-input';
+import {
+  matchIsValidColor,
+  MuiColorInput,
+  MuiColorInputColors,
+  MuiColorInputProps,
+} from 'mui-color-input';
 import { CrudContext } from '../shared/context';
 import type { DataField, DataFieldFormValue, DataModel, DataSource, OmitId } from './types';
 
@@ -34,6 +41,8 @@ export interface CrudFormSlotProps {
   datePicker?: DatePickerProps;
   dateTimePicker?: DateTimePickerProps;
   select?: SelectProps;
+  fileInput?: MuiFileInputProps;
+  colorInput?: MuiColorInputProps;
 }
 
 export interface CrudFormSlots {
@@ -61,7 +70,17 @@ export interface CrudFormSlots {
    * The select component used in the form.
    * @default Select
    */
-  select: React.JSXElementConstructor<SelectProps>;
+  select?: React.JSXElementConstructor<SelectProps>;
+  /**
+   * The file input component used in the form.
+   * @default FileInput
+   */
+  fileInput?: React.JSXElementConstructor<MuiFileInputProps>;
+  /**
+   * The color input component used in the form.
+   * @default ColorInput
+   */
+  colorInput?: React.JSXElementConstructor<MuiColorInputProps>;
 }
 
 export interface CrudFormProps<D extends DataModel> {
@@ -146,6 +165,22 @@ function CrudForm<D extends DataModel>(props: CrudFormProps<D>) {
   const handleTextFieldChange = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       onFieldChange(event.target.name, event.target.value);
+    },
+    [onFieldChange],
+  );
+
+  const handleFileInputFieldChange = React.useCallback(
+    (value: File | null, fieldName: string) => {
+      onFieldChange(fieldName, value);
+    },
+    [onFieldChange],
+  );
+
+  const handleColorInputFieldChange = React.useCallback(
+    (color: string, colors: MuiColorInputColors, fieldName: string) => {
+      if (matchIsValidColor(color)) {
+        onFieldChange(fieldName, color);
+      }
     },
     [onFieldChange],
   );
@@ -331,6 +366,41 @@ function CrudForm<D extends DataModel>(props: CrudFormProps<D>) {
             </FormControl>
           );
         }
+      } else if (type === 'fileInput') {
+        const FileInputComponent = slots?.fileInput ?? MuiFileInput;
+
+        fieldElement = (
+          <FileInputComponent
+            onChange={(v: File | null) => handleFileInputFieldChange(v, field)}
+            name={field}
+            label={headerName}
+            placeholder={headerName}
+            error={!!fieldError}
+            helperText={fieldError ?? ' '}
+            fullWidth
+            value={(fieldValue as File) ?? null}
+            multiple={false}
+            inputProps={slotProps?.fileInput?.inputProps}
+          />
+        );
+      } else if (type === 'colorInput') {
+        const ColorInputComponent = slots?.colorInput ?? MuiColorInput;
+
+        fieldElement = (
+          <ColorInputComponent
+            onChange={(color: string, colors: MuiColorInputColors) =>
+              handleColorInputFieldChange(color, colors, field)
+            }
+            name={field}
+            label={headerName}
+            placeholder={headerName}
+            error={!!fieldError}
+            helperText={fieldError ?? ' '}
+            fullWidth
+            value={(fieldValue as string) ?? null}
+            format="hex"
+          />
+        );
       }
 
       return (
@@ -347,6 +417,8 @@ function CrudForm<D extends DataModel>(props: CrudFormProps<D>) {
       handleNumberFieldChange,
       handleSelectFieldChange,
       handleTextFieldChange,
+      handleFileInputFieldChange,
+      handleColorInputFieldChange,
       onFieldChange,
       slotProps,
       slots,
@@ -418,8 +490,10 @@ CrudForm.propTypes /* remove-proptypes */ = {
    */
   slotProps: PropTypes.shape({
     checkbox: PropTypes.object,
+    colorInput: PropTypes.object,
     datePicker: PropTypes.object,
     dateTimePicker: PropTypes.object,
+    fileInput: PropTypes.object,
     select: PropTypes.object,
     textField: PropTypes.object,
   }),
@@ -429,8 +503,10 @@ CrudForm.propTypes /* remove-proptypes */ = {
    */
   slots: PropTypes.shape({
     checkbox: PropTypes.elementType,
+    colorInput: PropTypes.elementType,
     datePicker: PropTypes.elementType,
     dateTimePicker: PropTypes.elementType,
+    fileInput: PropTypes.elementType,
     select: PropTypes.elementType,
     textField: PropTypes.elementType,
   }),

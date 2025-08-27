@@ -34,7 +34,7 @@ export type DataField<F extends DataFieldFormValue = DataFieldFormValue> = Remap
   GridColDef,
   'type'
 > & {
-  type?: GridColType;
+  type?: GridColType | 'fileInput' | 'colorInput';
   renderFormField?: DataFieldRenderFormField<F>;
 };
 

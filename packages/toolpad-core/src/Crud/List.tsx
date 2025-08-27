@@ -9,15 +9,16 @@ import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
 import {
   DataGrid,
-  GridToolbar,
-  GridActionsCellItem,
   DataGridProps,
+  GridActionsCellItem,
+  gridClasses,
   GridColDef,
+  GridColType,
+  GridEventListener,
   GridFilterModel,
   GridPaginationModel,
   GridSortModel,
-  GridEventListener,
-  gridClasses,
+  GridToolbar,
 } from '@mui/x-data-grid';
 import type { DataGridProProps } from '@mui/x-data-grid-pro';
 import type { DataGridPremiumProps } from '@mui/x-data-grid-premium';
@@ -398,6 +399,7 @@ function List<D extends DataModel>(props: ListProps<D>) {
       ...fields.map((field) => ({
         ...field,
         editable: false,
+        type: field.type as GridColType,
       })),
       {
         field: 'actions',

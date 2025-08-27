@@ -74,3 +74,5 @@ test-results
 
 # playground/auth-vite
 playground/auth-vite
+
+.idea

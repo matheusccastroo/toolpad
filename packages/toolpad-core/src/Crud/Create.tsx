@@ -289,8 +289,10 @@ Create.propTypes /* remove-proptypes */ = {
   slotProps: PropTypes.shape({
     form: PropTypes.shape({
       checkbox: PropTypes.object,
+      colorInput: PropTypes.object,
       datePicker: PropTypes.object,
       dateTimePicker: PropTypes.object,
+      fileInput: PropTypes.object,
       select: PropTypes.object,
       textField: PropTypes.object,
     }),
@@ -303,8 +305,10 @@ Create.propTypes /* remove-proptypes */ = {
   slots: PropTypes.shape({
     form: PropTypes.shape({
       checkbox: PropTypes.elementType,
+      colorInput: PropTypes.elementType,
       datePicker: PropTypes.elementType,
       dateTimePicker: PropTypes.elementType,
+      fileInput: PropTypes.elementType,
       select: PropTypes.elementType,
       textField: PropTypes.elementType,
     }),
