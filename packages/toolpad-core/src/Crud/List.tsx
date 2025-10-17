@@ -50,9 +50,9 @@ export interface ListSlots {
    * @default DataGrid
    */
   dataGrid?:
-    | React.JSXElementConstructor<DataGridProps>
-    | React.JSXElementConstructor<DataGridProProps>
-    | React.JSXElementConstructor<DataGridPremiumProps>;
+  | React.JSXElementConstructor<DataGridProps>
+  | React.JSXElementConstructor<DataGridProProps>
+  | React.JSXElementConstructor<DataGridPremiumProps>;
   pageContainer?: React.JSXElementConstructor<PageContainerProps>;
 }
 
@@ -104,6 +104,8 @@ export interface ListProps<D extends DataModel> {
    * Locale text for the component.
    */
   localeText?: CRUDLocaleText;
+
+  headerContent?: React.ReactNode;
 }
 
 /**
@@ -128,6 +130,7 @@ function List<D extends DataModel>(props: ListProps<D>) {
     slots,
     slotProps,
     localeText: propsLocaleText,
+    headerContent,
   } = props;
 
   const globalLocaleText = useLocaleText();
@@ -419,13 +422,13 @@ function List<D extends DataModel>(props: ListProps<D>) {
             : []),
           ...(deleteOne
             ? [
-                <GridActionsCellItem
-                  key="delete-item"
-                  icon={<DeleteIcon />}
-                  label={localeText.deleteLabel}
-                  onClick={handleItemDelete(id)}
-                />,
-              ]
+              <GridActionsCellItem
+                key="delete-item"
+                icon={<DeleteIcon />}
+                label={localeText.deleteLabel}
+                onClick={handleItemDelete(id)}
+              />,
+            ]
             : []),
         ],
       },
@@ -476,6 +479,7 @@ function List<D extends DataModel>(props: ListProps<D>) {
                   </IconButton>
                 </div>
               </Tooltip>
+              {headerContent}
               {onCreateClick ? (
                 <Button variant="contained" onClick={onCreateClick} startIcon={<AddIcon />}>
                   {localeText.createNewButtonLabel}
@@ -510,15 +514,15 @@ function List<D extends DataModel>(props: ListProps<D>) {
                     outline: 'transparent',
                   },
                   [`& .${gridClasses.columnHeader}:focus-within, & .${gridClasses.cell}:focus-within`]:
-                    {
-                      outline: 'none',
-                    },
+                  {
+                    outline: 'none',
+                  },
                   ...(onRowClick
                     ? {
-                        [`& .${gridClasses.row}:hover`]: {
-                          cursor: 'pointer',
-                        },
-                      }
+                      [`& .${gridClasses.row}:hover`]: {
+                        cursor: 'pointer',
+                      },
+                    }
                     : {}),
                   ...slotProps?.dataGrid?.sx,
                 }}

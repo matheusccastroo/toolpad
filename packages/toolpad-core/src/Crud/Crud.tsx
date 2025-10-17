@@ -64,6 +64,8 @@ export interface CrudProps<D extends DataModel> {
     form?: CrudFormSlotProps;
     pageContainer?: PageContainerProps;
   };
+
+  headerContent?: React.ReactNode
 }
 /**
  *
@@ -85,6 +87,7 @@ function Crud<D extends DataModel>(props: CrudProps<D>) {
     pageTitles,
     slots,
     slotProps,
+    headerContent,
   } = props;
 
   const listPath = rootPath;
@@ -135,6 +138,7 @@ function Crud<D extends DataModel>(props: CrudProps<D>) {
           onCreateClick={handleCreateClick}
           onEditClick={handleEditClick}
           pageTitle={pageTitles?.list}
+          headerContent={headerContent}
           slots={{
             ...(slots?.pageContainer
               ? {
@@ -269,6 +273,7 @@ function Crud<D extends DataModel>(props: CrudProps<D>) {
     showPath,
     slotProps,
     slots,
+    headerContent,
   ]);
 
   return (
